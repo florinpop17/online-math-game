@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-        <title>Socket.IO chat</title>
+        <title>Crazy math game</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <style>
             body {
@@ -72,12 +72,29 @@
             class="bg-slate-900 fixed inset-0 flex items-center justify-center z-10"
         >
             <form
-                class="flex flex-col gap-4 bg-white p-4 rounded shadow"
+                class="flex flex-col gap-2 bg-white p-4 rounded shadow"
                 action=""
                 id="user"
             >
-                <h1 class="text-center text-2xl font-medium">Hello gamer!</h1>
-                <p>Enter a username to get started</p>
+                <h1 class="text-center text-2xl font-medium">
+                    Hello Math Genius! 👋
+                </h1>
+                <p>How good are you at "simple" math?</p>
+
+                <h2 class="text-xl mt-4">Rules:</h2>
+                <ul class="text-sm list-disc pl-4">
+                    <li>Solve math problems before others do.</li>
+                    <li>
+                        Get points for
+                        <span class="text-green-600">correct</span> answers
+                    </li>
+                    <li>
+                        Subtract points for
+                        <span class="text-red-600">incorrect</span> answers
+                    </li>
+                </ul>
+                <p class="mt-4">Enter a username to get started:</p>
+
                 <input
                     class="border px-4 py-2 rounded"
                     placeholder="Enter username"
