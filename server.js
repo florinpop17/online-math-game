@@ -113,7 +113,7 @@ function generateMathExpression() {
 function fakeNumbers(expression) {
     return expression
         .split(" ")
-        .map((word) => `<span class="scale-0">999</span><span>${word}</span>`)
+        .map((word) => `<span style="display:none">999</span>${word}`)
         .join(" ");
 }
 
