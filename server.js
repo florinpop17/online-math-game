@@ -7,6 +7,8 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server);
 
+const port = process.env.PORT || 6969;
+
 const users = [];
 const mathThingies = [];
 const MAX_GAMES = 5;
@@ -112,6 +114,6 @@ function getRandomNumber() {
     return Math.floor(Math.random() * 99);
 }
 
-server.listen(6969, () => {
-    console.log("server running at http://localhost:6969");
+server.listen(port, () => {
+    console.log(`server running at http://localhost:${port}`);
 });
