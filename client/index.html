@@ -159,7 +159,7 @@
                 newMathEl.id = `math-${newMath.id}`;
                 newMathEl.style.left =
                     Math.random() * (window.innerWidth - 100) + "px";
-                newMathEl.innerHTML = fakeNumbers(newMath.expression);
+                newMathEl.innerHTML = newMath.expression;
 
                 appEl.appendChild(newMathEl);
             });
@@ -188,16 +188,6 @@
                     userForm.parentElement.classList.add("hidden");
                 }
             });
-
-            function fakeNumbers(expression) {
-                return expression
-                    .split(" ")
-                    .map(
-                        (word) =>
-                            `<span class="hidden">123</span><span>${word}</span>`
-                    )
-                    .join(" ");
-            }
         </script>
     </body>
 </html>

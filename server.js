@@ -104,10 +104,17 @@ function generateMathExpression() {
     const result = eval(expression);
 
     return {
-        expression,
+        expression: fakeNumbers(expression),
         result,
         id: ID++,
     };
+}
+
+function fakeNumbers(expression) {
+    return expression
+        .split(" ")
+        .map((word) => `<span class="scale-0">999</span><span>${word}</span>`)
+        .join(" ");
 }
 
 function getRandomNumber() {
