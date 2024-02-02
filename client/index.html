@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <title>Socket.IO chat</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            body {
+                margin: 0;
+                padding-bottom: 3rem;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                    Roboto, Helvetica, Arial, sans-serif;
+            }
+
+            #form {
+                background: rgba(0, 0, 0, 0.15);
+                padding: 0.25rem;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                display: flex;
+                height: 3rem;
+                box-sizing: border-box;
+                backdrop-filter: blur(10px);
+            }
+            #input {
+                border: none;
+                padding: 0 1rem;
+                flex-grow: 1;
+                border-radius: 2rem;
+                margin: 0.25rem;
+            }
+            #input:focus {
+                outline: none;
+            }
+            #form > button {
+                background: #333;
+                border: none;
+                padding: 0 1rem;
+                margin: 0.25rem;
+                border-radius: 3px;
+                outline: none;
+                color: #fff;
+            }
+
+            #messages {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+            }
+            #messages > li {
+                padding: 0.5rem 1rem;
+            }
+            #messages > li:nth-child(odd) {
+                background: #efefef;
+            }
+
+            .fall {
+                animation: fall 5s linear infinite;
+            }
+
+            @keyframes fall {
+                100% {
+                    translate: 0 100vh;
+                }
+            }
+        </style>
+    </head>
+    <body class="bg-indigo-950">
+        <div
+            class="bg-slate-900 fixed inset-0 flex items-center justify-center z-10"
+        >
+            <form
+                class="flex flex-col gap-4 bg-white p-4 rounded shadow"
+                action=""
+                id="user"
+            >
+                <h1 class="text-center text-2xl font-medium">Hello gamer!</h1>
+                <p>Enter a username to get started</p>
+                <input
+                    class="border px-4 py-2 rounded"
+                    placeholder="Enter username"
+                    type="text"
+                    id="username"
+                />
+                <button
+                    class="border border-purple-700 bg-purple-700 text-white py-2 px-4 rounded transition hover:bg-white hover:text-purple-700"
+                >
+                    Start
+                </button>
+            </form>
+        </div>
+
+        <div
+            class="bg-indigo-900 fixed top-4 right-4 rounded border shadow p-4 text-white max-w-[200px] w-full"
+        >
+            <h2 class="text-xl font-bold text-center mb-4">Leaderboard</h2>
+            <ul
+                class="space-y-2 max-h-[400px] overflow-y-auto"
+                id="leaderboard"
+            ></ul>
+        </div>
+
+        <form id="form" action="">
+            <input id="input" autocomplete="off" /><button>Send</button>
+        </form>
+
+        <div id="app"></div>
+
+        <script
+            type="text/javascript"
+            src="https://cdn.socket.io/4.7.4/socket.io.min.js"
+        ></script>
+        <script>
+            const socket = io();
+
+            const form = document.getElementById("form");
+            const appEl = document.getElementById("app");
+            const leaderboardEl = document.getElementById("leaderboard");
+            const input = document.getElementById("input");
+
+            socket.on("leaderboard", (leaderboard) => {
+                leaderboardEl.innerHTML = "";
+
+                leaderboard.forEach((user, idx) => {
+                    const li = document.createElement("li");
+
+                    li.innerHTML = `<small>${idx + 1}.</small> <strong>${
+                        user.username
+                    }</strong>: ${user.score}`;
+
+                    leaderboardEl.appendChild(li);
+                });
+            });
+
+            socket.on("new-math", (newMath) => {
+                const newMathEl = document.createElement("div");
+
+                newMathEl.className =
+                    "fall fixed top-0 text-white bg-purple-900 px-4 py-2 rounded border shadow";
+                newMathEl.id = `math-${newMath.id}`;
+                newMathEl.style.left =
+                    Math.random() * (window.innerWidth - 100) + "px";
+                newMathEl.innerText = newMath.expression;
+
+                appEl.appendChild(newMathEl);
+            });
+
+            socket.on("solved", (id) => {
+                document.getElementById(`math-${id}`).remove();
+            });
+
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+                if (input.value) {
+                    socket.emit("answer", input.value);
+                    input.value = "";
+                }
+            });
+
+            const userForm = document.getElementById("user");
+            const usernameEl = document.getElementById("username");
+
+            userForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                if (usernameEl.value) {
+                    socket.emit("login", usernameEl.value);
+                    usernameEl.value = "";
+
+                    userForm.parentElement.classList.add("hidden");
+                }
+            });
+        </script>
+    </body>
+</html>
